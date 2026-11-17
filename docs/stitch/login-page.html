@@ -1,0 +1,386 @@
+<!DOCTYPE html><html class="h-full" lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIM-PKM Poltek SSN - Masuk ke Portal</title>
+<!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            ssn: {
+              navy: '#061E45',
+              dark: '#0F172A',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="base-styling">
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body class="bg-cover bg-no-repeat bg-[#061E45] min-h-screen relative overflow-x-hidden text-slate-800 antialiased selection:bg-sky-500 selection:text-white" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDGAzg57VPPh_u8BDd1Na8uTEcURGhPkbvElhaj2aW9cad4MK4co1ZLP82ylAHSDOb0MJ1E8cnkyiivNUOJX2JAOH_QXeLGTLVSAU4nWtiZvmsdiUwevbNwOezvRkIIu1BV_upbv5UZ7HsxQQLCTV3NCOaFzRIcy860OyGExwO--2O84_mEkT_8wmK6wtIfS1YklxcrqP9_gMmeHWSAkbJ3JyVZUy2ceEdZwhfYkfQ3W5R2w8dTuRLcbA&quot;); background-attachment: fixed; background-position: 85% center;">
+<!-- BEGIN: Top Navigation Bar with Fixed Line-Wrapping -->
+<header class="absolute top-6 left-6 right-6 z-20 flex justify-between items-center pointer-events-auto">
+<!-- Left button: Kembali ke Beranda -->
+<a class="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2 rounded-full bg-[#061E45]/75 backdrop-blur-md border border-white/25 text-white text-xs font-medium hover:bg-[#061E45] transition shadow-sm group" href="#">
+<svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Kembali ke Beranda</span>
+</a>
+<!-- Right pill: Institutional Status -->
+<div class="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2 rounded-full bg-[#061E45]/75 backdrop-blur-md border border-white/25 text-white text-xs font-mono shadow-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+<span>STATUS: ONLINE • TAHUN 2026</span>
+</div>
+</header>
+<!-- END: Top Navigation Bar -->
+<!-- BEGIN: Main Content Container (Asymmetric Layout keeping left/center visual unobstructed) -->
+<main class="min-h-screen flex items-center justify-center lg:justify-end px-6 lg:px-20 py-12 relative z-10">
+<!-- BEGIN: Glassmorphic Login Card -->
+<section class="w-full max-w-[420px] bg-white/95 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(6,30,69,0.18)] rounded-2xl p-7 sm:p-8 transition-all">
+<!-- Card Header: Official Emblem & Institution Title -->
+<div class="flex items-center gap-3">
+<img alt="Logo Resmi Poltek SSN" class="w-11 h-11 object-contain shrink-0 drop-shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5RTdwx26o6DLl9b8fQu2mMbPNtnAPiT9pLP9ikUEFL1tmVBA7im5bww_EfcmudoatKXPeyJywBXCMo6iZ8udjXsvjPUrLpmNMV24AZ11S9ffp-QZLa8MF8UTyhKHyWGgBYlb3UssdEGVz-OKD5nTFnbjOj2HhDVREvSru0YW8XhkIgyfvYwYZNdOavBlcTvo18o_fst4ctKupu9V947UJ1h-CFKMUg95xFQ7hraEWN5s-Yp5Ce0X6zA">
+<div class="flex flex-col">
+<h2 class="text-xl font-bold text-[#0F172A] leading-tight">SIM-PKM</h2>
+<p class="text-[10px] font-semibold tracking-wider text-slate-500 uppercase">POLITEKNIK SIBER DAN SANDI NEGARA</p>
+</div>
+</div>
+<!-- Header Title & Subtitle -->
+<h1 class="text-2xl font-bold text-slate-900 mt-4 mb-0.5 tracking-tight">Masuk ke Portal</h1>
+<p class="text-xs text-slate-500 mb-6">Akses sistem PKM Poltek SSN</p>
+<!-- Unified Error Banner (OWASP ASVS V2.2.2 Anti-Enumeration) -->
+<div class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-xs text-red-700 animate-fade-in" id="errorAlert" role="alert">
+<svg class="w-4 h-4 shrink-0 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="leading-relaxed" id="errorMessage">Kredensial atau peran yang dipilih tidak valid. Silakan periksa kembali.</span>
+</div>
+<!-- Lockout Alert Banner (OWASP ASVS V2.2.1 Brute-Force Rate Limiting) -->
+<div class="hidden mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-800" id="lockoutAlert" role="alert">
+<svg class="w-4 h-4 shrink-0 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="leading-relaxed" id="lockoutMessage">Terlalu banyak percobaan masuk. Silakan tunggu <span class="font-mono font-bold" id="lockoutCountdown">60</span> detik sebelum mencoba kembali.</span>
+</div>
+<!-- 
+        OWASP ASVS V4.1 Access Control Note:
+        The UI role selector below is strictly intended for client-side UX routing and input customization.
+        It is NEVER trusted as an authorization grant. The authentication server must validate the user's
+        verified server-side role and issue appropriate session claims and redirects upon authentication.
+      -->
+<div class="mb-5">
+<label class="block text-[11px] font-semibold text-slate-500 tracking-wider uppercase mb-2">PILIH PERAN ANDA</label>
+<div class="bg-slate-100 p-1 rounded-xl grid grid-cols-4 gap-1 mb-1" role="tablist">
+<button aria-selected="true" class="role-btn bg-[#0F172A] text-white shadow-sm font-semibold text-xs py-2 rounded-lg text-center transition-all cursor-pointer" id="role-taruna" onclick="switchRole('taruna')" type="button">
+            Taruna
+          </button>
+<button aria-selected="false" class="role-btn text-slate-600 hover:text-slate-900 font-medium text-xs py-2 rounded-lg text-center transition-all cursor-pointer" id="role-dosen" onclick="switchRole('dosen')" type="button">
+            Dosen
+          </button>
+<button aria-selected="false" class="role-btn text-slate-600 hover:text-slate-900 font-medium text-xs py-2 rounded-lg text-center transition-all cursor-pointer" id="role-reviewer" onclick="switchRole('reviewer')" type="button">
+            Reviewer
+          </button>
+<button aria-selected="false" class="role-btn text-slate-600 hover:text-slate-900 font-medium text-xs py-2 rounded-lg text-center transition-all cursor-pointer" id="role-admin" onclick="switchRole('admin')" type="button">
+            Admin PPM
+          </button>
+</div>
+</div>
+<!-- BEGIN: LoginForm -->
+<form class="space-y-4" id="loginForm" method="POST" onsubmit="handleLoginSubmit(event)">
+<!-- Input Field: Dynamic Identity (NIM / NIDN) -->
+<div>
+<label class="block text-xs font-medium text-slate-700 mb-1.5" for="identifier" id="identifierLabel">
+            NIM (Nomor Induk Mahasiswa)
+          </label>
+<div class="relative flex items-center">
+<div class="absolute left-3.5 pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input autocomplete="username" class="w-full pl-10 pr-3.5 py-2.5 text-xs sm:text-sm bg-white hover:bg-white focus:bg-white border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 rounded-xl outline-none text-slate-800 placeholder:text-slate-400 transition-all font-mono" id="identifier" name="identifier" placeholder="Masukkan NIM (contoh: 2120014)" required="" type="text">
+</div>
+</div>
+<!-- Input Field: OWASP ASVS Empty Password with toggle -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-xs font-medium text-slate-700" for="password">Kata Sandi</label>
+<button class="text-xs text-sky-600 hover:text-sky-700 font-medium transition-colors cursor-pointer" onclick="openForgotModal()" type="button">
+              Lupa kata sandi?
+            </button>
+</div>
+<div class="relative flex items-center">
+<div class="absolute left-3.5 pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input autocomplete="current-password" class="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-white hover:bg-white focus:bg-white border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 rounded-xl outline-none text-slate-800 placeholder:text-slate-400 transition-all font-mono" id="password" name="password" placeholder="Masukkan kata sandi" required="" type="password" value="">
+<button aria-label="Tampilkan kata sandi" class="absolute right-3.5 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors cursor-pointer" id="togglePasswordBtn" onclick="togglePasswordVisibility()" type="button">
+<!-- Eye Off (Hidden) Icon -->
+<svg class="w-4 h-4" fill="none" id="eyeOffIcon" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<!-- Eye Open (Visible) Icon -->
+<svg class="w-4 h-4 hidden" fill="none" id="eyeOpenIcon" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Shared-Device Session Hygiene (OWASP ASVS V3.2 & V3.3) -->
+<div class="pt-1">
+<label class="text-xs text-slate-700 flex items-start gap-2.5 cursor-pointer select-none">
+<input class="w-4 h-4 mt-0.5 rounded text-sky-600 focus:ring-sky-500 border-slate-300" id="remember" name="remember" type="checkbox">
+<div class="flex flex-col">
+<span class="font-medium text-slate-700">Ingat sesi ini di perangkat ini</span>
+<span class="text-[11px] text-slate-400 leading-tight mt-0.5">Jangan aktifkan pada komputer laboratorium atau perangkat bersama.</span>
+</div>
+</label>
+</div>
+<!-- CTA Submit Button -->
+<button class="w-full mt-3 py-3 px-4 bg-[#0F172A] hover:bg-slate-800 active:scale-[0.99] text-white font-semibold rounded-xl text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0F172A]" id="submitBtn" type="submit">
+<span>Masuk</span>
+<svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</form>
+<!-- END: LoginForm -->
+<!-- BEGIN: High-Contrast Card Footer -->
+<footer class="border-t border-slate-100 pt-5 mt-6 flex flex-col items-center gap-1.5 text-center">
+<p class="text-xs text-slate-600 font-medium text-center">
+          🔒 Koneksi Terenkripsi TLS • Direktorat PPM Poltek SSN
+        </p>
+<a class="text-xs text-sky-600 hover:underline text-center" href="#">
+          Butuh bantuan akun? Hubungi Admin PPM
+        </a>
+</footer>
+<!-- END: High-Contrast Card Footer -->
+</section>
+<!-- END: Glassmorphic Login Card -->
+</main>
+<!-- END: Main Content Container -->
+<!-- BEGIN: Non-Enumerating Password Recovery Modal (OWASP ASVS V2.5) -->
+<div class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" id="forgotModal">
+<div class="relative bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-white/80 animate-fade-in">
+<!-- Close button -->
+<button aria-label="Tutup dialog" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg transition cursor-pointer" onclick="closeForgotModal()" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 leading-tight">Pemulihan Kata Sandi</h3>
+<p class="text-xs text-slate-500">SIM-PKM Politeknik Siber dan Sandi Negara</p>
+</div>
+</div>
+<!-- Initial Input State -->
+<form class="space-y-4" id="forgotForm" onsubmit="handleForgotSubmit(event)">
+<p class="text-xs text-slate-600 leading-relaxed">
+          Masukkan NIM, NIDN, atau alamat email institusi resmi Anda (@poltekssn.ac.id) untuk menerima instruksi pemulihan.
+        </p>
+<div>
+<label class="block text-xs font-medium text-slate-700 mb-1.5" for="recoveryIdentity">Identitas atau Email Institusi</label>
+<input class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 rounded-xl outline-none text-slate-800 placeholder:text-slate-400 transition font-mono" id="recoveryIdentity" placeholder="Contoh: 2120014 atau nama@poltekssn.ac.id" required="" type="text">
+</div>
+<div class="flex items-center justify-end gap-2 pt-2">
+<button class="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800 rounded-lg transition cursor-pointer" onclick="closeForgotModal()" type="button">
+            Batal
+          </button>
+<button class="px-4 py-2 text-xs font-semibold bg-[#0F172A] hover:bg-slate-800 text-white rounded-lg transition shadow-sm cursor-pointer" type="submit">
+            Kirim Tautan Pemulihan
+          </button>
+</div>
+</form>
+<!-- Anti-Enumeration Confirmation Response (Always positive, does not leak account existence) -->
+<div class="hidden space-y-4 text-center py-2" id="forgotSuccess">
+<div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 mb-1">Permintaan Diterima</h4>
+<p class="text-xs text-slate-600 leading-relaxed px-2">
+            Jika identitas terdaftar dalam sistem, tautan pemulihan berbatas waktu telah dikirim ke email institusi Anda.
+          </p>
+</div>
+<button class="w-full py-2.5 px-4 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition cursor-pointer" onclick="closeForgotModal()" type="button">
+          Kembali ke Masuk
+        </button>
+</div>
+</div>
+</div>
+<!-- END: Non-Enumerating Password Recovery Modal -->
+<!-- BEGIN: Interactive Client Logic (OWASP ASVS Simulation & Tabs) -->
+<script data-purpose="sim-pkm-logic">
+    // State tracking for rate limiting demo (OWASP ASVS V2.2.1)
+    let failedAttempts = 0;
+    let lockoutTimer = null;
+    let secondsLeft = 60;
+
+    /**
+     * Switch Active Role Tab
+     * Dynamic label and placeholder updates based on selected role
+     */
+    function switchRole(role) {
+      const roles = ['taruna', 'dosen', 'reviewer', 'admin'];
+      const activeClasses = ['bg-[#0F172A]', 'text-white', 'shadow-sm', 'font-semibold'];
+      const inactiveClasses = ['text-slate-600', 'hover:text-slate-900', 'font-medium'];
+
+      const labelEl = document.getElementById('identifierLabel');
+      const inputEl = document.getElementById('identifier');
+
+      roles.forEach(r => {
+        const btn = document.getElementById('role-' + r);
+        if (r === role) {
+          btn.classList.remove(...inactiveClasses);
+          btn.classList.add(...activeClasses);
+          btn.setAttribute('aria-selected', 'true');
+        } else {
+          btn.classList.remove(...activeClasses);
+          btn.classList.add(...inactiveClasses);
+          btn.setAttribute('aria-selected', 'false');
+        }
+      });
+
+      if (role === 'taruna') {
+        labelEl.textContent = 'NIM (Nomor Induk Mahasiswa)';
+        inputEl.placeholder = 'Masukkan NIM (contoh: 2120014)';
+      } else {
+        labelEl.textContent = 'NIDN / NIP';
+        inputEl.placeholder = 'Masukkan NIDN atau NIP';
+      }
+
+      // Hide general error on role switch
+      document.getElementById('errorAlert').classList.add('hidden');
+    }
+
+    /**
+     * Accessible Password Visibility Toggle
+     */
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const eyeOffIcon = document.getElementById('eyeOffIcon');
+      const eyeOpenIcon = document.getElementById('eyeOpenIcon');
+      const toggleBtn = document.getElementById('togglePasswordBtn');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeOffIcon.classList.add('hidden');
+        eyeOpenIcon.classList.remove('hidden');
+        toggleBtn.setAttribute('aria-label', 'Sembunyikan kata sandi');
+      } else {
+        passwordInput.type = 'password';
+        eyeOffIcon.classList.remove('hidden');
+        eyeOpenIcon.classList.add('hidden');
+        toggleBtn.setAttribute('aria-label', 'Tampilkan kata sandi');
+      }
+    }
+
+    /**
+     * Handle Login Submission with ASVS Simulation
+     */
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const errorAlert = document.getElementById('errorAlert');
+      const submitBtn = document.getElementById('submitBtn');
+
+      failedAttempts++;
+
+      if (failedAttempts >= 5) {
+        // Trigger brute force lockout UI
+        errorAlert.classList.add('hidden');
+        triggerLockout();
+        return;
+      }
+
+      // Unified Anti-Enumeration Error Message (ASVS V2.2.2)
+      errorAlert.classList.remove('hidden');
+    }
+
+    /**
+     * ASVS V2.2.1 Interactive Lockout Simulation
+     */
+    function triggerLockout() {
+      const lockoutAlert = document.getElementById('lockoutAlert');
+      const submitBtn = document.getElementById('submitBtn');
+      const countdownEl = document.getElementById('lockoutCountdown');
+
+      lockoutAlert.classList.remove('hidden');
+      submitBtn.disabled = true;
+      secondsLeft = 60;
+      countdownEl.textContent = secondsLeft;
+
+      if (lockoutTimer) clearInterval(lockoutTimer);
+
+      lockoutTimer = setInterval(() => {
+        secondsLeft--;
+        countdownEl.textContent = secondsLeft;
+        if (secondsLeft <= 0) {
+          clearInterval(lockoutTimer);
+          lockoutAlert.classList.add('hidden');
+          submitBtn.disabled = false;
+          failedAttempts = 0;
+        }
+      }, 1000);
+    }
+
+    /**
+     * Password Recovery Modal Open/Close & Anti-Enumeration Confirmation
+     */
+    function openForgotModal() {
+      document.getElementById('forgotModal').classList.remove('hidden');
+      document.getElementById('forgotForm').classList.remove('hidden');
+      document.getElementById('forgotSuccess').classList.add('hidden');
+      document.getElementById('recoveryIdentity').value = '';
+    }
+
+    function closeForgotModal() {
+      document.getElementById('forgotModal').classList.add('hidden');
+    }
+
+    function handleForgotSubmit(e) {
+      e.preventDefault();
+      // Instantly show non-enumerating generic confirmation
+      document.getElementById('forgotForm').classList.add('hidden');
+      document.getElementById('forgotSuccess').classList.remove('hidden');
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeForgotModal();
+    });
+  </script>
+<!-- END: Interactive Client Logic -->
+
+
+</body></html>

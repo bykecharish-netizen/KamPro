@@ -1,0 +1,1635 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIM-PKM Poltek SSN — Sistem Informasi Manajemen PKM Taruna</title>
+<!-- Tailwind CSS with forms & container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            poltek: {
+              navy: '#0F172A',
+              deep: '#061E45',
+              sky: '#0284C7',
+              cyan: '#06B6D4',
+              gold: '#D97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(241, 245, 249, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased text-slate-800 min-h-screen selection:bg-sky-100 selection:text-sky-900 bg-[#061E45] relative">
+<!-- Full-bleed Sovereign Cyber Illustration Background -->
+<div class="fixed inset-0 z-0 bg-[#0A192F] bg-gradient-to-b from-[#0B1E3B] via-[#081528] to-[#040C18] pointer-events-none"></div>
+<!-- Interactive Dev & ASVS Testing Bar (Top Ribbon) -->
+<div class="fixed top-0 inset-x-0 z-50 bg-slate-950/90 text-white backdrop-blur-md border-b border-sky-500/20 py-1.5 px-4 text-xs font-mono">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="text-slate-400">OWASP ASVS v4.0.3 L1 Active</span>
+<span class="text-slate-600 hidden sm:inline">|</span>
+<span class="text-sky-400 font-semibold hidden sm:inline">Switch Role/View:</span>
+</div>
+<div class="flex items-center gap-1 overflow-x-auto py-0.5">
+<button class="role-switcher-btn px-2.5 py-1 rounded font-medium hover:bg-sky-500 transition-colors bg-sky-600 text-white" id="btn-view-public" onclick="setAppState('public', null)">
+          Publik (Tamu)
+        </button>
+<button class="role-switcher-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors" id="btn-view-taruna" onclick="setAppState('dashboard', 'taruna')">
+          Taruna
+        </button>
+<button class="role-switcher-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors" id="btn-view-dosen" onclick="setAppState('dashboard', 'dosen')">
+          Dosen
+        </button>
+<button class="role-switcher-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors" id="btn-view-reviewer" onclick="setAppState('dashboard', 'reviewer')">
+          Reviewer
+        </button>
+<button class="role-switcher-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors" id="btn-view-admin" onclick="setAppState('dashboard', 'admin')">
+          Admin PPM
+        </button>
+<button class="role-switcher-btn px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-colors bg-slate-800 text-slate-300" id="btn-view-login" onclick="setAppState('login', null)">
+          Gateway /login
+        </button>
+</div>
+</div>
+</div>
+<!-- Transparent Top Navigation Bar -->
+<header class="fixed top-7 inset-x-0 z-40 transition-all duration-300 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between">
+<!-- Left: Institutional Brand Identity -->
+<a class="flex items-center space-x-3 group" href="javascript:void(0)" onclick="setAppState('public', null)">
+<div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-1 flex items-center justify-center shadow-lg group-hover:border-sky-400/50 transition-colors">
+<img alt="Logo Resmi Politeknik Siber dan Sandi Negara" class="w-10 h-10 object-contain drop-shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARYfXaAwCGtJHkMtFS-XKajJdyl12tmIb3mHc0mKSvDs2Fl5rCss5BPgDnLpSKiaGZiERJdjEQ4g6gTxkBqfYUy-KySh3TbkDSyKewIaGU4wsxUYn3zwK0wHvBOeNKYhC0Zoqi4FQEC_t9abgIei8-D5i_GCK2B-D4h3AtPNrk7eAhBjZWilne9fjOwbGImDuQ8hZEOKdxY-ZBU4t-z8fhP6EDJmY_gOpGdh9CzGQSEh3CS7_PhC7j2g">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="text-white font-bold text-lg tracking-tight">SIM-PKM</span>
+<span class="text-[10px] font-mono tracking-wider text-sky-400 bg-sky-950/60 border border-sky-400/30 px-1.5 py-0.5 rounded">v2.6-PROD</span>
+</div>
+<span class="whitespace-nowrap inline-flex items-center text-cyan-200/85 text-[10px] font-mono tracking-wider uppercase">
+            POLITEKNIK SIBER DAN SANDI NEGARA
+          </span>
+</div>
+</a>
+<!-- Right: Navigation Links & Auth State Action -->
+<nav class="flex items-center space-x-4 sm:space-x-6">
+<div class="hidden md:flex items-center space-x-6 text-sm">
+<a class="text-white/80 hover:text-white transition-colors duration-150 font-medium" href="#skema-section">Skema PKM</a>
+<a class="text-white/80 hover:text-white transition-colors duration-150 font-medium" href="#linimasa-section">Linimasa</a>
+<a class="text-white/80 hover:text-white transition-colors duration-150 font-medium" href="javascript:void(0)" onclick="openGuidanceModal()">Panduan 2026</a>
+</div>
+<!-- Unauthenticated CTA / Logged in User Bar -->
+<div class="flex items-center space-x-3" id="nav-auth-container">
+          <span class="whitespace-nowrap inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-200 text-xs font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>● Periode 2026 Dibuka</span>
+          </span>
+          <button onclick="setAppState('login', null)" class="bg-white text-[#0F172A] hover:bg-sky-50 px-4 py-2 rounded-full text-sm font-semibold shadow-sm hover:shadow transition-all duration-200 flex items-center space-x-1.5">
+            <span>Masuk Portal</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+        </div>
+</nav>
+</div>
+</header>
+<!-- VIEW CONTAINER 1 & 3: MAIN WORKSPACE (Public & Role Dashboards) -->
+<div class="relative z-10" id="main-workspace-view">
+<!-- Unobstructed Hero Stage: Top 42vh reserved for flag, emblem, cyber nodes, and cloud line -->
+<div class="pt-24 pb-6 w-full relative flex flex-col items-center justify-center text-center px-4"><div class="inline-flex items-center space-x-2.5 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 text-white text-xs font-mono tracking-wide shadow-xl mb-3"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>SANATA PAROKSHARTA BHAKTI • PORTAL USULAN PKM</span></div><h1 class="text-white font-bold text-2xl sm:text-3xl tracking-tight">Sistem Informasi Manajemen PKM Poltek SSN</h1><p class="text-cyan-200/80 text-xs sm:text-sm font-mono mt-1">Mewujudkan Taruna Berjiwa Inovatif, Berkarakter Pengabdian Siber &amp; Sandi Negara</p></div>
+<!-- Main Editorial White Card -->
+<main class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+<div class="bg-white/95 backdrop-blur-xl rounded-t-3xl border border-white/70 shadow-[0_-12px_45px_rgba(6,30,69,0.18)] overflow-hidden">
+<!-- Top Hairline indicator -->
+<div class="h-[3px] w-full bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-600"></div><div class="relative w-full sm:h-80 lg:h-96 overflow-hidden border-b border-slate-200 bg-slate-900 h-80"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEtbtQqXVBDqoPkQ1iP1YCf7OwgItwzjWaPJdCR7nX4TExTfLajHv_1bX9A3nQJVrnZ5Vl6aum5-nQW45GyBpWXW4wp8S9qfwDfshnGePRacvO7O_gKMjpUDuPgKZPqBc3wpzkabYBEqKMCV6FRG8NlDCNssWUuPHrJ7p7hW28O2oBKnUPFptudH5a6FjjYgcKGDpI5eWoS7ckxgFul06jCcvG9uzihT3KInJvdlWdQNKDXoUm0Bt1Mg" alt="Ilustrasi Pengabdian dan Inovasi Siber Taruna Poltek SSN" class="w-full h-full object-cover" style="object-position: center 25%;"><div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent flex items-end p-6 sm:p-8"><div class="text-white"><span class="px-2.5 py-1 rounded bg-sky-500/90 text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-sm">Wahana Pengabdian &amp; Riset Siber</span><h2 class="text-lg sm:text-2xl font-bold text-white mt-1.5 drop-shadow-md">Pemberdayaan Talenta Siber Taruna Poltek SSN untuk Masyarakat</h2><p class="text-xs sm:text-sm text-slate-200 mt-1 max-w-2xl drop-shadow-sm">Kolaborasi riset teknologi persandian, edukasi keamanan informasi publik, dan inkubasi inovasi rekayasa kriptografi 2026.</p></div></div></div>
+<!-- 12-Column Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 min-h-[700px]">
+<!-- Sidebar (3 Columns) -->
+<aside class="lg:col-span-3 border-b lg:border-b-0 lg:border-r border-slate-200/80 p-6 flex flex-col justify-between bg-slate-50/50">
+<div>
+<!-- Institutional Emblem Header -->
+<div class="flex items-center space-x-3 pb-5 border-b border-slate-200/70">
+<div class="w-10 h-10 rounded-xl bg-slate-900 p-1 flex items-center justify-center shadow-md">
+<img alt="Logo Poltek SSN" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARYfXaAwCGtJHkMtFS-XKajJdyl12tmIb3mHc0mKSvDs2Fl5rCss5BPgDnLpSKiaGZiERJdjEQ4g6gTxkBqfYUy-KySh3TbkDSyKewIaGU4wsxUYn3zwK0wHvBOeNKYhC0Zoqi4FQEC_t9abgIei8-D5i_GCK2B-D4h3AtPNrk7eAhBjZWilne9fjOwbGImDuQ8hZEOKdxY-ZBU4t-z8fhP6EDJmY_gOpGdh9CzGQSEh3CS7_PhC7j2g">
+</div>
+<div>
+<p class="text-[10px] font-mono tracking-widest uppercase text-sky-700 font-bold">Direktorat PPM</p>
+<h2 class="text-xs font-bold text-slate-900">Poltek SSN Cyber Hub</h2>
+</div>
+</div>
+<!-- Context-aware Navigation Links -->
+<nav class="mt-6 space-y-1.5" id="sidebar-nav">
+        <a href="#ringkasan" class="group flex items-center justify-between py-2.5 px-3 rounded-lg bg-sky-50/70 border-l-[3px] border-[#0284C7] transition-all">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs font-bold text-sky-700">01</span>
+            <span class="text-sm font-semibold text-slate-900 group-hover:text-sky-900">Ringkasan Portal</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+        </a>
+
+        <a href="#skema-section" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">02</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Skema &amp; Kuota PKM</span>
+          </div>
+          <span class="whitespace-nowrap inline-flex items-center text-[11px] font-mono text-slate-400">4 Bidang</span>
+        </a>
+
+        <a href="#direktori-usulan" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">03</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Direktori Usulan</span>
+          </div>
+          <span class="whitespace-nowrap inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-100 text-amber-800 font-semibold">Terkunci</span>
+        </a>
+
+        <a href="#linimasa-section" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">04</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Linimasa Seleksi</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="openGuidanceModal()" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">05</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Unduh Pedoman</span>
+          </div>
+          <span class="material-symbols-outlined text-[16px] text-slate-400">download</span>
+        </a>
+      </nav>
+</div>
+<!-- Bottom Sidebar Info & Downloads -->
+<div class="mt-8 pt-5 border-t border-slate-200/70 space-y-3">
+<button class="w-full inline-flex items-center justify-center space-x-2 py-2.5 px-3.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-sm transition-all" onclick="openGuidanceModal()">
+<span class="material-symbols-outlined text-[18px] text-sky-600">download</span>
+<span>Unduh Panduan PKM 2026</span>
+</button>
+<div class="p-3 rounded-lg bg-sky-50/60 border border-sky-100 text-[11px] font-mono text-slate-600">
+<div class="flex items-center justify-between text-slate-500 mb-1">
+<span>Sandi Internal</span>
+<span class="text-emerald-600 font-semibold">Aktif</span>
+</div>
+<div class="text-[10px] text-slate-500 leading-tight">
+<p class="whitespace-nowrap inline-flex items-center font-medium">Poltek SSN • Ciseeng, Bogor</p>
+<p class="text-[10px] text-slate-400 mt-1">SIM-PKM Build 2026.04-L1</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (9 Columns) -->
+<section class="lg:col-span-9 p-6 lg:p-8 flex flex-col justify-between">
+<div id="dashboard-content-panel">
+        <!-- Split Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between pb-6 border-b border-slate-200/80 gap-4">
+          <div>
+            <p class="text-xs font-mono font-bold tracking-wider text-sky-600 uppercase mb-1">Pusat Komando Riset &amp; Inovasi Taruna</p>
+            <h1 class="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900">
+              01 / Portal Manajemen PKM
+            </h1>
+          </div>
+          <p class="text-sm text-slate-500 leading-relaxed max-w-md">
+            Platform terpusat pengajuan proposal, penelaahan dosen pembimbing, dan pemantauan seleksi internal Program Kreativitas Mahasiswa bagi Taruna Poltek SSN.
+          </p>
+        </div>
+
+        <!-- Key Indicators Strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-6 border-b border-slate-100">
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/60">
+            <p class="text-[11px] font-mono text-slate-400 uppercase">Total Usulan</p>
+            <p class="text-2xl font-bold text-slate-900 font-mono mt-0.5">69 <span class="text-xs font-sans font-normal text-slate-500">Tim Usulan</span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/60">
+            <p class="text-[11px] font-mono text-slate-400 uppercase">Taruna Terlibat</p>
+            <p class="text-2xl font-bold text-slate-900 font-mono mt-0.5">284 <span class="text-xs font-sans font-normal text-slate-500">Taruna Terlibat</span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/60">
+            <p class="text-[11px] font-mono text-slate-400 uppercase">Dosen Penilai</p>
+            <p class="text-2xl font-bold text-slate-900 font-mono mt-0.5">32 <span class="text-xs font-sans font-normal text-slate-500">Dosen Reviewer</span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-200/60">
+            <p class="text-[11px] font-mono text-amber-700 uppercase">Sisa Waktu Tahap 1</p>
+            <p class="text-2xl font-bold text-amber-600 font-mono mt-0.5">14 <span class="text-xs font-sans font-normal text-amber-700">Hari Sisa Tahap 1</span></p>
+          </div>
+        </div>
+
+        <!-- 4 Schemes Grid (Always Public) -->
+        <div id="skema-section" class="mt-8">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+              <span>Skema PKM Aktif Poltek SSN</span>
+            </h2>
+            <span class="text-xs font-mono text-slate-400">Tahun Anggaran 2026</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <!-- PKM-KC -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-sky-400 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#0284C7]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-100">PKM-KC</span>
+                  <span class="text-[11px] font-mono text-slate-400">85% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Karsa Cipta</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">24 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#0284C7] h-full rounded-full" style="width: 85%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Lab Kriptografi</span>
+                  <span class="font-mono text-slate-600 font-semibold">24/28 Tim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PKM-RE -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-500 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#0F172A]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">PKM-RE</span>
+                  <span class="text-[11px] font-mono text-slate-400">75% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Riset Eksakta</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">18 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#0F172A] h-full rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Lab Siber</span>
+                  <span class="font-mono text-slate-600 font-semibold">18/24 Tim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PKM-PI -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-cyan-400 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#06B6D4]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-700 border border-cyan-100">PKM-PI</span>
+                  <span class="text-[11px] font-mono text-slate-400">50% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Penerapan Iptek</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">12 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#06B6D4] h-full rounded-full" style="width: 50%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Mitra Siber Desa</span>
+                  <span class="font-mono text-slate-600 font-semibold">12/24 Tim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PKM-K -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-amber-400 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#D97706]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-100">PKM-K</span>
+                  <span class="text-[11px] font-mono text-slate-400">65% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Kewirausahaan</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">15 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#D97706] h-full rounded-full" style="width: 65%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Inkubator Siber</span>
+                  <span class="font-mono text-slate-600 font-semibold">15/20 Tim</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STRICT DATA BOUNDARY: OWASP ASVS V4.1 LOCKED CARD -->
+        <div id="direktori-usulan" class="mt-10">
+          <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950 border border-slate-800 text-white shadow-xl relative overflow-hidden">
+            <!-- Background Decorative Lock Pattern -->
+            <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+              <span class="material-symbols-outlined text-[180px]">security</span>
+            </div>
+
+            <div class="relative z-10 max-w-2xl">
+              <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-mono mb-4">
+                <span class="material-symbols-outlined text-[15px]">lock</span>
+                <span>ASVS V4.1 Access Control Boundary</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                Direktori &amp; Status Penelaahan Usulan Terkunci
+              </h3>
+              <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                Silakan masuk menggunakan akun resmi Poltek SSN untuk melihat rincian usulan, catatan bimbingan, dan status review internal. Nama dosen pembimbing dan berkas internal hanya dapat diakses oleh personil yang telah terotentikasi.
+              </p>
+              
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button onclick="setAppState('login', null)" class="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm shadow-md transition-all flex items-center space-x-2">
+                  <span>Masuk untuk Akses Penuh</span>
+                  <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+                <button onclick="openGuidanceModal()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono text-white transition-colors">
+                  Lihat Ketentuan Pembimbingan
+                </button>
+              </div>
+            </div>
+
+            <!-- Anonymized Public Safe Highlights -->
+            <div class="mt-6 pt-5 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <div>
+                  <span class="text-sky-300 font-mono text-[11px] block">PKM-KC • Sorotan Terbuka</span>
+                  <span class="font-medium text-slate-200">Sistem Deteksi Intrusi SCADA</span>
+                  <span class="text-[10px] text-slate-400 block mt-0.5">Oleh: Tim Taruna Siber (Anonymized)</span>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Lolos Nasional 2025</span>
+              </div>
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <div>
+                  <span class="text-cyan-300 font-mono text-[11px] block">PKM-RE • Sorotan Terbuka</span>
+                  <span class="font-medium text-slate-200">Ketahanan Enkripsi Kyber</span>
+                  <span class="text-[10px] text-slate-400 block mt-0.5">Oleh: Tim Taruna Sandi (Anonymized)</span>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-sky-500/20 text-sky-300 border border-sky-400/30">Publikasi Terpilih</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linimasa Section -->
+        <div id="linimasa-section" class="mt-10">
+          <h2 class="text-sm font-bold text-slate-900 tracking-tight mb-4 flex items-center space-x-2">
+            <span class="material-symbols-outlined text-amber-500 text-[18px]">event</span>
+            <span>Linimasa Seleksi PKM Poltek SSN 2026</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+            <div class="p-3.5 rounded-xl border border-sky-200 bg-sky-50/50">
+              <span class="text-[10px] font-mono text-sky-700 font-bold block mb-1">01 - 25 JAN 2026</span>
+              <p class="font-bold text-slate-900">Pengajuan Usulan</p>
+              <p class="text-[11px] text-slate-500 mt-1">Unggah proposal &amp; lembar pengesahan pembimbing.</p>
+            </div>
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-[10px] font-mono text-slate-400 font-bold block mb-1">26 JAN - 05 FEB</span>
+              <p class="font-bold text-slate-900">Review Pembimbing</p>
+              <p class="text-[11px] text-slate-500 mt-1">Persetujuan substansi awal dosen pembimbing.</p>
+            </div>
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-[10px] font-mono text-slate-400 font-bold block mb-1">06 - 15 FEB 2026</span>
+              <p class="font-bold text-slate-900">Penilaian Reviewer</p>
+              <p class="text-[11px] text-slate-500 mt-1">Scoring rubrik substantif oleh dewan reviewer.</p>
+            </div>
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-[10px] font-mono text-slate-400 font-bold block mb-1">20 FEB 2026</span>
+              <p class="font-bold text-slate-900">Submit Belmawa</p>
+              <p class="text-[11px] text-slate-500 mt-1">Pengajuan serentak ke portal Simbelmawa Nasional.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- Institutional Micro Footer within Content Area -->
+<div class="mt-12 pt-6 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+<div class="flex items-center space-x-2 font-mono text-[11px]">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="whitespace-nowrap inline-flex items-center">Server: SANAPATI-NODE-01</span>
+<span>•</span>
+<span>Latensi: 14ms (Enkripsi TLS 1.3)</span>
+</div>
+<p class="text-center sm:text-right">© 2026 Pusat Penelitian &amp; Pengabdian Masyarakat — Politeknik Siber dan Sandi Negara</p>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+<!-- VIEW CONTAINER 2: ASYMMETRIC GLASSMORPHIC LOGIN GATEWAY (/login) -->
+<div class="hidden relative z-20 min-h-screen flex items-center justify-end px-4 sm:px-8 lg:px-20 py-24" id="login-view">
+<!-- Login Floating Card on the Right (Leaves left 60% with flag, seal & hands unobstructed) -->
+<div class="w-full max-w-[460px] bg-white/95 backdrop-blur-2xl rounded-3xl shadow-[0_25px_60px_rgba(6,30,69,0.35)] border border-white/80 p-7 sm:p-9 relative">
+<!-- Top header bar within card -->
+<div class="flex items-center justify-between pb-4 border-b border-slate-100">
+<button class="text-xs font-mono font-medium text-slate-600 hover:text-sky-600 flex items-center space-x-1.5 transition-colors whitespace-nowrap inline-flex" onclick="setAppState('public', null)">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Kembali ke Beranda</span>
+</button>
+<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold whitespace-nowrap inline-flex items-center">
+          ● STATUS: ONLINE • TAHUN 2026
+        </span>
+</div>
+<!-- Identity Header -->
+<div class="flex items-center space-x-3.5 mt-5">
+<div class="w-12 h-12 rounded-2xl bg-slate-900 p-1.5 flex items-center justify-center shadow-lg border border-slate-800">
+<img alt="Logo Poltek SSN" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARYfXaAwCGtJHkMtFS-XKajJdyl12tmIb3mHc0mKSvDs2Fl5rCss5BPgDnLpSKiaGZiERJdjEQ4g6gTxkBqfYUy-KySh3TbkDSyKewIaGU4wsxUYn3zwK0wHvBOeNKYhC0Zoqi4FQEC_t9abgIei8-D5i_GCK2B-D4h3AtPNrk7eAhBjZWilne9fjOwbGImDuQ8hZEOKdxY-ZBU4t-z8fhP6EDJmY_gOpGdh9CzGQSEh3CS7_PhC7j2g">
+</div>
+<div>
+<h2 class="text-lg font-bold text-slate-900 leading-tight">Gateway Autentikasi</h2>
+<p class="text-xs text-slate-500 font-mono">SIM-PKM Politeknik Siber dan Sandi Negara</p>
+</div>
+</div>
+<!-- Role Selector Tabs -->
+<div class="mt-6">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2 font-mono">Pilih Peran Akun</label>
+<div class="grid grid-cols-4 gap-1 p-1 bg-slate-100/90 rounded-xl border border-slate-200/70 text-xs font-medium">
+<button class="login-role-tab py-1.5 rounded-lg text-center transition-all bg-white font-semibold text-sky-700 shadow-sm" id="tab-taruna" onclick="selectLoginRole('taruna')" type="button">
+            Taruna
+          </button>
+<button class="login-role-tab py-1.5 rounded-lg text-center transition-all text-slate-600 hover:text-slate-900" id="tab-dosen" onclick="selectLoginRole('dosen')" type="button">
+            Dosen
+          </button>
+<button class="login-role-tab py-1.5 rounded-lg text-center transition-all text-slate-600 hover:text-slate-900" id="tab-reviewer" onclick="selectLoginRole('reviewer')" type="button">
+            Reviewer
+          </button>
+<button class="login-role-tab py-1.5 rounded-lg text-center transition-all text-slate-600 hover:text-slate-900" id="tab-admin" onclick="selectLoginRole('admin')" type="button">
+            Admin
+          </button>
+</div>
+</div>
+<!-- OWASP ASVS Alert Banner -->
+<div class="hidden mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start space-x-2" id="login-error-alert">
+<span class="material-symbols-outlined text-[18px] text-rose-600 shrink-0">error</span>
+<span id="login-error-text">Kredensial atau peran yang dipilih tidak valid. Silakan periksa kembali.</span>
+</div>
+<!-- Brute Force Lockout Banner -->
+<div class="hidden mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start space-x-2" id="login-lockout-alert">
+<span class="material-symbols-outlined text-[18px] text-amber-600 shrink-0">lock_clock</span>
+<div>
+<p class="font-semibold">Batas percobaan terlampaui (ASVS V2.2.1)</p>
+<p class="text-[11px] mt-0.5">Sistem terkunci selama <span class="font-bold text-amber-800" id="lockout-countdown">60</span> detik demi keamanan akun institusi.</p>
+</div>
+</div>
+<!-- Login Form -->
+<form class="mt-5 space-y-4" id="login-form" onsubmit="handleLoginSubmit(event)">
+<div>
+<label class="block text-xs font-semibold text-slate-700 font-mono mb-1.5" for="identity-input" id="login-id-label">
+            NIM (Nomor Induk Mahasiswa)
+          </label>
+<div class="relative">
+<input class="w-full text-sm rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500 font-mono py-2.5 px-3 text-slate-900 placeholder:text-slate-400" id="identity-input" placeholder="Masukkan NIM (contoh: 2120014)" required="" type="text">
+<span class="absolute right-3 top-2.5 text-slate-400 material-symbols-outlined text-[20px]">badge</span>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-xs font-semibold text-slate-700 font-mono" for="password-input">Kata Sandi</label>
+<button class="text-xs text-sky-600 hover:text-sky-700 font-medium" onclick="openForgotModal()" type="button">Lupa kata sandi?</button>
+</div>
+<div class="relative">
+<input class="w-full text-sm rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500 font-mono py-2.5 pr-10 pl-3 text-slate-900 placeholder:text-slate-400" id="password-input" placeholder="Masukkan kata sandi portal" required="" type="password" value="">
+<button aria-label="Toggle password visibility" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 focus:outline-none" onclick="togglePasswordVisibility()" type="button">
+<span class="material-symbols-outlined text-[20px]" id="password-toggle-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Session Hygiene Checkbox (ASVS V3.2) -->
+<div class="pt-1">
+<label class="flex items-start space-x-2 cursor-pointer">
+<input class="mt-0.5 rounded border-slate-300 text-sky-600 focus:ring-sky-500" id="remember-me" type="checkbox">
+<span class="text-xs text-slate-600 leading-tight">
+              Ingat sesi ini di perangkat ini
+              <span class="block text-[10px] text-slate-400 font-sans mt-0.5">Hindari mengaktifkan pada komputer laboratorium/bersama.</span>
+</span>
+</label>
+</div>
+<button class="w-full py-2.5 px-4 bg-[#0F172A] hover:bg-slate-800 text-white font-semibold text-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center space-x-2" id="login-submit-btn" type="submit">
+<span>Otentikasi &amp; Masuk</span>
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</button>
+</form>
+<!-- Quick Evaluator Fillers (Demo shortcut buttons) -->
+<div class="mt-6 pt-5 border-t border-slate-100">
+<p class="text-[11px] font-mono text-slate-400 mb-2 uppercase tracking-wide text-center">Akses Cepat Penguji (Demo Auto-Fill)</p>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<button class="py-1.5 px-2 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 rounded-lg font-mono text-[11px] transition-colors text-left border border-slate-200/60 truncate" onclick="quickFill('taruna')" type="button">
+            Taruna (NIM: 2120014)
+          </button>
+<button class="py-1.5 px-2 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 rounded-lg font-mono text-[11px] transition-colors text-left border border-slate-200/60 truncate" onclick="quickFill('dosen')" type="button">
+            Dosen Pembimbing
+          </button>
+<button class="py-1.5 px-2 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 rounded-lg font-mono text-[11px] transition-colors text-left border border-slate-200/60 truncate" onclick="quickFill('reviewer')" type="button">
+            Reviewer Substansi
+          </button>
+<button class="py-1.5 px-2 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 rounded-lg font-mono text-[11px] transition-colors text-left border border-slate-200/60 truncate" onclick="quickFill('admin')" type="button">
+            Admin PPM
+          </button>
+</div>
+</div>
+<!-- Security Trust Footer (ASVS) -->
+<div class="mt-5 text-center">
+<p class="text-[11px] font-mono text-slate-400 flex items-center justify-center space-x-1.5">
+<span class="material-symbols-outlined text-[14px] text-emerald-600">lock</span>
+<span>Koneksi Terenkripsi TLS • Direktorat PPM Poltek SSN</span>
+</p>
+</div>
+</div>
+</div>
+<!-- MODAL: Password Recovery (ASVS V2.5 Anti-Enumeration) -->
+<div class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" id="forgot-modal">
+<div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<h3 class="text-sm font-bold text-slate-900 font-mono flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-sky-600">lock_reset</span>
+<span>Pemulihan Kata Sandi</span>
+</h3>
+<button class="text-slate-400 hover:text-slate-600" onclick="closeForgotModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4">
+<p class="text-xs text-slate-600 leading-relaxed">
+          Masukkan identitas institusi Anda (NIM / NIDN / NIP). Sistem akan memproses tautan reset aman.
+        </p>
+<div class="mt-3">
+<label class="block text-[11px] font-mono font-medium text-slate-700 mb-1">Identitas Taruna/Pegawai</label>
+<input class="w-full text-sm rounded-lg border-slate-300 py-2 px-3 font-mono" id="forgot-id-input" placeholder="contoh: 2120014 atau 198506..." type="text">
+</div>
+<div class="hidden mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-800" id="forgot-success-box">
+<strong>Permintaan Terkirim (ASVS V2.5):</strong><br>
+          Jika identitas terdaftar, instruksi pemulihan berbatas waktu telah dikirim ke email institusi Anda.
+        </div>
+</div>
+<div class="mt-5 flex justify-end space-x-2">
+<button class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50" onclick="closeForgotModal()">Tutup</button>
+<button class="px-4 py-1.5 rounded-lg bg-sky-600 text-xs font-semibold text-white hover:bg-sky-500" onclick="triggerForgotSuccess()">Kirim Instruksi</button>
+</div>
+</div>
+</div>
+<!-- MODAL: Guidance / Pedoman PKM 2026 -->
+<div class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" id="guidance-modal">
+<div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-sky-600">menu_book</span>
+<h3 class="text-base font-bold text-slate-900">Pedoman &amp; Dokumen Resmi PKM 2026</h3>
+</div>
+<button class="text-slate-400 hover:text-slate-600" onclick="closeGuidanceModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4 space-y-3">
+<div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+<div>
+<h4 class="text-xs font-bold text-slate-900">Buku Panduan Teknis PKM Internal Poltek SSN 2026</h4>
+<p class="text-[11px] text-slate-500 font-mono mt-0.5">PDF • 3.4 MB • Rev. 1.2 Terverifikasi PPM</p>
+</div>
+<button class="px-3 py-1.5 bg-sky-600 text-white rounded-lg text-xs font-medium hover:bg-sky-500 transition-colors flex items-center space-x-1" onclick="alert('Mengunduh Panduan Teknis PKM Internal 2026...'); closeGuidanceModal();">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Unduh</span>
+</button>
+</div>
+<div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+<div>
+<h4 class="text-xs font-bold text-slate-900">Format Lembar Pengesahan Resmi (Format LaTeX &amp; DOCX)</h4>
+<p class="text-[11px] text-slate-500 font-mono mt-0.5">ZIP • 1.1 MB • Sesuai Standar Belmawa Dikti</p>
+</div>
+<button class="px-3 py-1.5 bg-sky-600 text-white rounded-lg text-xs font-medium hover:bg-sky-500 transition-colors flex items-center space-x-1" onclick="alert('Mengunduh Format Lembar Pengesahan...'); closeGuidanceModal();">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Unduh</span>
+</button>
+</div>
+<div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+<div>
+<h4 class="text-xs font-bold text-slate-900">Pedoman Rubrik Penilaian Reviewer Internal</h4>
+<p class="text-[11px] text-slate-500 font-mono mt-0.5">PDF • 840 KB • Standar ISO 27001 &amp; ASVS</p>
+</div>
+<button class="px-3 py-1.5 bg-sky-600 text-white rounded-lg text-xs font-medium hover:bg-sky-500 transition-colors flex items-center space-x-1" onclick="alert('Mengunduh Rubrik Penilaian Reviewer...'); closeGuidanceModal();">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Unduh</span>
+</button>
+</div>
+</div>
+<div class="mt-6 flex justify-end">
+<button class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800" onclick="closeGuidanceModal()">Selesai</button>
+</div>
+</div>
+</div>
+<!-- MODAL: Ajukan Proposal Baru (Taruna) -->
+<div class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" id="proposal-modal">
+<div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-sky-600">note_add</span>
+<h3 class="text-base font-bold text-slate-900">Formulir Pengajuan Usulan PKM Baru</h3>
+</div>
+<button class="text-slate-400 hover:text-slate-600" onclick="closeProposalModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form class="mt-4 space-y-3.5" onsubmit="handleNewProposal(event)">
+<div>
+<label class="block text-xs font-mono font-medium text-slate-700 mb-1">Skema PKM</label>
+<select class="w-full text-xs rounded-lg border-slate-300 py-2 px-3" id="modal-scheme">
+<option value="PKM-KC">PKM-KC (Karsa Cipta - Lab Kriptografi)</option>
+<option value="PKM-RE">PKM-RE (Riset Eksakta - Lab Siber)</option>
+<option value="PKM-PI">PKM-PI (Penerapan Iptek - Keamanan Desa)</option>
+<option value="PKM-K">PKM-K (Kewirausahaan Siber)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-mono font-medium text-slate-700 mb-1">Judul Proposal</label>
+<input class="w-full text-xs rounded-lg border-slate-300 py-2 px-3" id="modal-title" placeholder="Contoh: Rancang Bangun Enkripsi Homomorfik pada Database Medis..." required="" type="text">
+</div>
+<div>
+<label class="block text-xs font-mono font-medium text-slate-700 mb-1">Dosen Pembimbing yang Diajukan</label>
+<select class="w-full text-xs rounded-lg border-slate-300 py-2 px-3" id="modal-dosen">
+<option>Dr. Ir. Ahmad Fauzi, S.ST., M.Kom.</option>
+<option>Mayor Sus Budi Wicaksono, M.T.</option>
+<option>Siti Rahmah, S.ST., M.Sc.</option>
+<option>Dian Prasetyo, M.Eng.</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-mono font-medium text-slate-700 mb-1">Berkas Draft Proposal (.PDF maks 10MB)</label>
+<input accept=".pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" type="file">
+</div>
+<div class="pt-2 flex justify-end space-x-2">
+<button class="px-3.5 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700" onclick="closeProposalModal()" type="button">Batal</button>
+<button class="px-4 py-1.5 rounded-lg bg-sky-600 text-white text-xs font-semibold hover:bg-sky-500" type="submit">Unggah Usulan</button>
+</div>
+</form>
+</div>
+</div>
+<!-- APPLICATION STATE & INTERACTION SCRIPT -->
+<script>
+    // State Model
+    const appState = {
+      view: 'public', // 'public', 'login', 'dashboard'
+      role: null,     // 'taruna', 'dosen', 'reviewer', 'admin'
+      selectedLoginRole: 'taruna',
+      failedAttempts: 0,
+      lockoutTimer: null,
+      lockoutSecondsRemaining: 0,
+    };
+
+    // Mock Users Data
+    const users = {
+      taruna: {
+        name: 'Taruna Madya M. Farhan Syahputra',
+        idNumber: '2120014',
+        badge: 'TARUNA TINGKAT III',
+        team: 'Sanapati Alpha',
+        proposalTitle: 'Sistem Deteksi Intrusi Berbasis Deep Learning pada Arsitektur SCADA Gardu Induk',
+        proposalId: 'PKM-KC-2026-014',
+        status: 'Review Dosen Pembimbing',
+        advisor: 'Dr. Ir. Ahmad Fauzi, S.ST., M.Kom.',
+        feedback: 'Perbaiki format bab 3 metodologi enkripsi dan uji coba fuzzing dataset.'
+      },
+      dosen: {
+        name: 'Dr. Ir. Ahmad Fauzi, S.ST., M.Kom.',
+        idNumber: '198103142008121002',
+        badge: 'DOSEN PEMBIMBING',
+        department: 'Jurusan Kriptografi & Rekayasa Perangkat Keras',
+        pendingReviewsCount: 3
+      },
+      reviewer: {
+        name: 'Mayor Sus Budi Wicaksono, M.T.',
+        idNumber: '197908222005011003',
+        badge: 'REVIEWER SUBSTANSI',
+        department: 'Pusat Keamanan Siber Nasional',
+        assignedCount: 5
+      },
+      admin: {
+        name: 'Kapten Aris Munandar, S.ST.',
+        idNumber: '198506192010121001',
+        badge: 'ADMIN PPM POLTEK SSN',
+        department: 'Direktorat Penelitian & Pengabdian Masyarakat',
+        totalTeams: 69
+      }
+    };
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCurrentView();
+    });
+
+    function setAppState(view, role = null) {
+      appState.view = view;
+      appState.role = role;
+      
+      // Update top preview switcher buttons highlight
+      document.querySelectorAll('.role-switcher-btn').forEach(btn => {
+        btn.classList.remove('bg-sky-600', 'text-white');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+
+      if (view === 'public') {
+        const b = document.getElementById('btn-view-public');
+        if (b) { b.classList.add('bg-sky-600', 'text-white'); b.classList.remove('bg-slate-800', 'text-slate-300'); }
+      } else if (view === 'login') {
+        const b = document.getElementById('btn-view-login');
+        if (b) { b.classList.add('bg-amber-600', 'text-white'); }
+      } else if (view === 'dashboard' && role) {
+        const b = document.getElementById(`btn-view-${role}`);
+        if (b) { b.classList.add('bg-sky-600', 'text-white'); b.classList.remove('bg-slate-800', 'text-slate-300'); }
+      }
+
+      renderCurrentView();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderCurrentView() {
+      const workspaceView = document.getElementById('main-workspace-view');
+      const loginView = document.getElementById('login-view');
+      const navAuthContainer = document.getElementById('nav-auth-container');
+
+      if (appState.view === 'login') {
+        workspaceView.classList.add('hidden');
+        loginView.classList.remove('hidden');
+        
+        // Setup login view
+        navAuthContainer.innerHTML = `
+          <button onclick="setAppState('public', null)" class="text-white/80 hover:text-white text-xs font-mono px-3 py-1.5 rounded-lg border border-white/20 hover:border-white/40 transition-colors flex items-center space-x-1.5">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Halaman Publik</span>
+          </button>
+        `;
+        selectLoginRole(appState.selectedLoginRole);
+        return;
+      }
+
+      // Normal Workspace (Public or Authenticated Dashboard)
+      loginView.classList.add('hidden');
+      workspaceView.classList.remove('hidden');
+
+      if (appState.view === 'public' || !appState.role) {
+        // Public View Header
+        navAuthContainer.innerHTML = `
+          <span class="whitespace-nowrap inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-200 text-xs font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>● Periode 2026 Dibuka</span>
+          </span>
+          <button onclick="setAppState('login', null)" class="bg-white text-[#0F172A] hover:bg-sky-50 px-4 py-2 rounded-full text-sm font-semibold shadow-sm hover:shadow transition-all duration-200 flex items-center space-x-1.5">
+            <span>Masuk Portal</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+        `;
+        renderPublicDashboard();
+      } else {
+        // Logged-in View Header
+        const user = users[appState.role];
+        navAuthContainer.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2.5 bg-white/10 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-full">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-white text-xs font-semibold max-w-[140px] sm:max-w-[200px] truncate">${user.name}</span>
+              <span class="whitespace-nowrap inline-flex items-center text-[10px] font-mono uppercase bg-sky-500/30 border border-sky-400/40 text-sky-200 px-2 py-0.5 rounded-full font-bold">
+                ${user.badge}
+              </span>
+            </div>
+            <button onclick="setAppState('public', null)" title="Keluar / Logout" class="text-rose-300 hover:text-white bg-rose-500/20 hover:bg-rose-600/40 border border-rose-500/30 px-3 py-1.5 rounded-full text-xs font-mono transition-colors flex items-center space-x-1">
+              <span class="material-symbols-outlined text-[16px]">logout</span>
+              <span class="hidden sm:inline">Keluar</span>
+            </button>
+          </div>
+        `;
+        renderRoleDashboard(appState.role);
+      }
+    }
+
+    // ----------------------------------------------------
+    // 1. PUBLIC DASHBOARD RENDERING (Strict OWASP ASVS V4.1)
+    // ----------------------------------------------------
+    function renderPublicDashboard() {
+      // Sidebar Navigation for Public
+      const sidebarNav = document.getElementById('sidebar-nav');
+      sidebarNav.innerHTML = `
+        <a href="#ringkasan" class="group flex items-center justify-between py-2.5 px-3 rounded-lg bg-sky-50/70 border-l-[3px] border-[#0284C7] transition-all">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs font-bold text-sky-700">01</span>
+            <span class="text-sm font-semibold text-slate-900 group-hover:text-sky-900">Ringkasan Portal</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+        </a>
+
+        <a href="#skema-section" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">02</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Skema &amp; Kuota PKM</span>
+          </div>
+          <span class="whitespace-nowrap inline-flex items-center text-[11px] font-mono text-slate-400">4 Bidang</span>
+        </a>
+
+        <a href="#direktori-usulan" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">03</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Direktori Usulan</span>
+          </div>
+          <span class="whitespace-nowrap inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-100 text-amber-800 font-semibold">Terkunci</span>
+        </a>
+
+        <a href="#linimasa-section" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">04</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Linimasa Seleksi</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="openGuidanceModal()" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-xs text-slate-400">05</span>
+            <span class="text-sm text-slate-600 group-hover:text-slate-900">Unduh Pedoman</span>
+          </div>
+          <span class="material-symbols-outlined text-[16px] text-slate-400">download</span>
+        </a>
+      `;
+
+      // Main Panel Content for Public
+      const content = document.getElementById('dashboard-content-panel');
+      content.innerHTML = `
+        <!-- Split Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between pb-6 border-b border-slate-200/80 gap-4">
+          <div>
+            <p class="text-xs font-mono font-bold tracking-wider text-sky-600 uppercase mb-1">Pusat Komando Riset &amp; Inovasi Taruna</p>
+            <h1 class="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900">
+              01 / Portal Manajemen PKM
+            </h1>
+          </div>
+          <p class="text-sm text-slate-500 leading-relaxed max-w-md">
+            Platform terpusat pengajuan proposal, penelaahan dosen pembimbing, dan pemantauan seleksi internal Program Kreativitas Mahasiswa bagi Taruna Poltek SSN.
+          </p>
+        </div>
+
+        <!-- Key Indicators Strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-6 border-b border-slate-100">
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/60">
+            <p class="text-[11px] font-mono text-slate-400 uppercase">Total Usulan</p>
+            <p class="text-2xl font-bold text-slate-900 font-mono mt-0.5">69 <span class="text-xs font-sans font-normal text-slate-500">Tim Usulan</span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/60">
+            <p class="text-[11px] font-mono text-slate-400 uppercase">Taruna Terlibat</p>
+            <p class="text-2xl font-bold text-slate-900 font-mono mt-0.5">284 <span class="text-xs font-sans font-normal text-slate-500">Taruna Terlibat</span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/60">
+            <p class="text-[11px] font-mono text-slate-400 uppercase">Dosen Penilai</p>
+            <p class="text-2xl font-bold text-slate-900 font-mono mt-0.5">32 <span class="text-xs font-sans font-normal text-slate-500">Dosen Reviewer</span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-200/60">
+            <p class="text-[11px] font-mono text-amber-700 uppercase">Sisa Waktu Tahap 1</p>
+            <p class="text-2xl font-bold text-amber-600 font-mono mt-0.5">14 <span class="text-xs font-sans font-normal text-amber-700">Hari Sisa Tahap 1</span></p>
+          </div>
+        </div>
+
+        <!-- 4 Schemes Grid (Always Public) -->
+        <div id="skema-section" class="mt-8">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+              <span>Skema PKM Aktif Poltek SSN</span>
+            </h2>
+            <span class="text-xs font-mono text-slate-400">Tahun Anggaran 2026</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <!-- PKM-KC -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-sky-400 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#0284C7]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-100">PKM-KC</span>
+                  <span class="text-[11px] font-mono text-slate-400">85% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Karsa Cipta</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">24 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#0284C7] h-full rounded-full" style="width: 85%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Lab Kriptografi</span>
+                  <span class="font-mono text-slate-600 font-semibold">24/28 Tim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PKM-RE -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-500 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#0F172A]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">PKM-RE</span>
+                  <span class="text-[11px] font-mono text-slate-400">75% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Riset Eksakta</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">18 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#0F172A] h-full rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Lab Siber</span>
+                  <span class="font-mono text-slate-600 font-semibold">18/24 Tim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PKM-PI -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-cyan-400 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#06B6D4]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-700 border border-cyan-100">PKM-PI</span>
+                  <span class="text-[11px] font-mono text-slate-400">50% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Penerapan Iptek</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">12 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#06B6D4] h-full rounded-full" style="width: 50%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Mitra Siber Desa</span>
+                  <span class="font-mono text-slate-600 font-semibold">12/24 Tim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PKM-K -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:border-amber-400 transition-colors duration-200 flex flex-col justify-between relative overflow-hidden group shadow-sm">
+              <div class="absolute top-0 inset-x-0 h-[3px] bg-[#D97706]"></div>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-100">PKM-K</span>
+                  <span class="text-[11px] font-mono text-slate-400">65% Kuota</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Kewirausahaan</h3>
+                <p class="text-xs text-slate-500 mt-1 font-mono">15 Tim Terdaftar</p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-slate-100">
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-[#D97706] h-full rounded-full" style="width: 65%"></div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
+                  <span>Inkubator Siber</span>
+                  <span class="font-mono text-slate-600 font-semibold">15/20 Tim</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STRICT DATA BOUNDARY: OWASP ASVS V4.1 LOCKED CARD -->
+        <div id="direktori-usulan" class="mt-10">
+          <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950 border border-slate-800 text-white shadow-xl relative overflow-hidden">
+            <!-- Background Decorative Lock Pattern -->
+            <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+              <span class="material-symbols-outlined text-[180px]">security</span>
+            </div>
+
+            <div class="relative z-10 max-w-2xl">
+              <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-mono mb-4">
+                <span class="material-symbols-outlined text-[15px]">lock</span>
+                <span>ASVS V4.1 Access Control Boundary</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                Direktori &amp; Status Penelaahan Usulan Terkunci
+              </h3>
+              <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                Silakan masuk menggunakan akun resmi Poltek SSN untuk melihat rincian usulan, catatan bimbingan, dan status review internal. Nama dosen pembimbing dan berkas internal hanya dapat diakses oleh personil yang telah terotentikasi.
+              </p>
+              
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button onclick="setAppState('login', null)" class="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm shadow-md transition-all flex items-center space-x-2">
+                  <span>Masuk untuk Akses Penuh</span>
+                  <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+                <button onclick="openGuidanceModal()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono text-white transition-colors">
+                  Lihat Ketentuan Pembimbingan
+                </button>
+              </div>
+            </div>
+
+            <!-- Anonymized Public Safe Highlights -->
+            <div class="mt-6 pt-5 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <div>
+                  <span class="text-sky-300 font-mono text-[11px] block">PKM-KC • Sorotan Terbuka</span>
+                  <span class="font-medium text-slate-200">Sistem Deteksi Intrusi SCADA</span>
+                  <span class="text-[10px] text-slate-400 block mt-0.5">Oleh: Tim Taruna Siber (Anonymized)</span>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Lolos Nasional 2025</span>
+              </div>
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <div>
+                  <span class="text-cyan-300 font-mono text-[11px] block">PKM-RE • Sorotan Terbuka</span>
+                  <span class="font-medium text-slate-200">Ketahanan Enkripsi Kyber</span>
+                  <span class="text-[10px] text-slate-400 block mt-0.5">Oleh: Tim Taruna Sandi (Anonymized)</span>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-sky-500/20 text-sky-300 border border-sky-400/30">Publikasi Terpilih</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linimasa Section -->
+        <div id="linimasa-section" class="mt-10">
+          <h2 class="text-sm font-bold text-slate-900 tracking-tight mb-4 flex items-center space-x-2">
+            <span class="material-symbols-outlined text-amber-500 text-[18px]">event</span>
+            <span>Linimasa Seleksi PKM Poltek SSN 2026</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+            <div class="p-3.5 rounded-xl border border-sky-200 bg-sky-50/50">
+              <span class="text-[10px] font-mono text-sky-700 font-bold block mb-1">01 - 25 JAN 2026</span>
+              <p class="font-bold text-slate-900">Pengajuan Usulan</p>
+              <p class="text-[11px] text-slate-500 mt-1">Unggah proposal &amp; lembar pengesahan pembimbing.</p>
+            </div>
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-[10px] font-mono text-slate-400 font-bold block mb-1">26 JAN - 05 FEB</span>
+              <p class="font-bold text-slate-900">Review Pembimbing</p>
+              <p class="text-[11px] text-slate-500 mt-1">Persetujuan substansi awal dosen pembimbing.</p>
+            </div>
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-[10px] font-mono text-slate-400 font-bold block mb-1">06 - 15 FEB 2026</span>
+              <p class="font-bold text-slate-900">Penilaian Reviewer</p>
+              <p class="text-[11px] text-slate-500 mt-1">Scoring rubrik substantif oleh dewan reviewer.</p>
+            </div>
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-[10px] font-mono text-slate-400 font-bold block mb-1">20 FEB 2026</span>
+              <p class="font-bold text-slate-900">Submit Belmawa</p>
+              <p class="text-[11px] text-slate-500 mt-1">Pengajuan serentak ke portal Simbelmawa Nasional.</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ----------------------------------------------------
+    // 2. ROLE DASHBOARD RENDERING (Taruna, Dosen, Reviewer, Admin)
+    // ----------------------------------------------------
+    function renderRoleDashboard(role) {
+      const sidebarNav = document.getElementById('sidebar-nav');
+      const content = document.getElementById('dashboard-content-panel');
+
+      if (role === 'taruna') {
+        const u = users.taruna;
+        sidebarNav.innerHTML = `
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg bg-sky-50/70 border-l-[3px] border-[#0284C7] transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-sky-700 text-[18px]">assignment</span>
+              <span class="text-sm font-bold text-slate-900">Proposal Tim Saya</span>
+            </div>
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+          </a>
+          <a href="javascript:void(0)" onclick="openProposalModal()" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-slate-400 text-[18px]">add_circle</span>
+              <span class="text-sm text-slate-600 group-hover:text-slate-900">+ Usulan Baru</span>
+            </div>
+          </a>
+          <a href="javascript:void(0)" onclick="openGuidanceModal()" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-slate-400 text-[18px]">menu_book</span>
+              <span class="text-sm text-slate-600 group-hover:text-slate-900">Panduan &amp; Template</span>
+            </div>
+          </a>
+        `;
+
+        content.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200/80 gap-4">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono text-[11px] font-bold">PORTAL TARUNA</span>
+                <span class="text-xs font-mono text-slate-400">NIM: ${u.idNumber}</span>
+              </div>
+              <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
+                Dashboard Usulan PKM
+              </h1>
+            </div>
+            <button onclick="openProposalModal()" class="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5">
+              <span class="material-symbols-outlined text-[18px]">add</span>
+              <span>+ Ajukan Proposal Baru</span>
+            </button>
+          </div>
+
+          <!-- Proposal Card -->
+          <div class="mt-6 p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
+              <div class="flex items-center space-x-2">
+                <span class="whitespace-nowrap inline-flex items-center text-xs font-mono font-bold px-2.5 py-1 rounded bg-sky-50 text-sky-700 border border-sky-100">PKM-KC</span>
+                <span class="font-mono text-xs text-slate-500">${u.proposalId}</span>
+              </div>
+              <span class="whitespace-nowrap inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                ● ${u.status}
+              </span>
+            </div>
+
+            <div class="mt-4">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                ${u.proposalTitle}
+              </h3>
+              <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-slate-600">
+                <p><strong>Ketua Tim:</strong> ${u.name}</p>
+                <p><strong>Dosen Pembimbing:</strong> ${u.advisor}</p>
+              </div>
+            </div>
+
+            <!-- Stepper Progress -->
+            <div class="mt-6 pt-5 border-t border-slate-100">
+              <p class="text-xs font-mono font-bold text-slate-700 uppercase mb-3">Status Tahapan Seleksi</p>
+              <div class="grid grid-cols-4 gap-2 text-center text-[11px] font-mono">
+                <div class="p-2 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold">
+                  1. Draft Diajukan ✓
+                </div>
+                <div class="p-2 rounded-lg bg-sky-100 text-sky-800 border border-sky-300 font-bold animate-pulse">
+                  2. Review Dosen ⏳
+                </div>
+                <div class="p-2 rounded-lg bg-slate-100 text-slate-400">
+                  3. Penilaian Reviewer
+                </div>
+                <div class="p-2 rounded-lg bg-slate-100 text-slate-400">
+                  4. Lolos Simbelmawa
+                </div>
+              </div>
+            </div>
+
+            <!-- Dosen Note -->
+            <div class="mt-5 p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900">
+              <div class="flex items-center space-x-2 font-bold mb-1">
+                <span class="material-symbols-outlined text-[18px] text-amber-700">rate_review</span>
+                <span>Catatan Pembimbing (${u.advisor}):</span>
+              </div>
+              <p class="text-amber-800 italic leading-relaxed">"${u.feedback}"</p>
+              <div class="mt-3 flex items-center space-x-2">
+                <button onclick="alert('Membuka form unggah revisi proposal...');" class="px-3 py-1 bg-amber-600 text-white rounded text-[11px] font-semibold hover:bg-amber-700">Unggah Revisi Bab 3</button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (role === 'dosen') {
+        const u = users.dosen;
+        sidebarNav.innerHTML = `
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg bg-sky-50/70 border-l-[3px] border-[#0284C7] transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-sky-700 text-[18px]">verified</span>
+              <span class="text-sm font-bold text-slate-900">Persetujuan Bimbingan</span>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-sky-200 text-sky-900 font-bold">3</span>
+          </a>
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-slate-400 text-[18px]">history</span>
+              <span class="text-sm text-slate-600 group-hover:text-slate-900">Riwayat Bimbingan</span>
+            </div>
+          </a>
+        `;
+
+        content.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200/80 gap-4">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold">PORTAL PEMBIMBING</span>
+                <span class="text-xs font-mono text-slate-400">NIDN: ${u.idNumber}</span>
+              </div>
+              <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
+                Persetujuan Usulan Taruna
+              </h1>
+            </div>
+            <span class="whitespace-nowrap inline-flex items-center px-3 py-1.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 text-xs font-mono font-semibold">
+              Perlu Persetujuan: ${u.pendingReviewsCount} Tim
+            </span>
+          </div>
+
+          <!-- Pending Action Table -->
+          <div class="mt-6 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <h3 class="text-xs font-bold text-slate-900 uppercase font-mono tracking-wider">Daftar Usulan Menunggu Persetujuan Anda</h3>
+              <span class="text-xs font-mono text-slate-500">T.A. 2026</span>
+            </div>
+            <div class="divide-y divide-slate-100">
+              <!-- Item 1 -->
+              <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50/50">
+                <div class="space-y-1">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">PKM-KC</span>
+                    <span class="text-xs font-mono text-slate-500">PKM-KC-2026-014</span>
+                    <span class="text-xs text-slate-500">• Taruna M. Farhan Syahputra</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-900">Sistem Deteksi Intrusi Berbasis Deep Learning pada Arsitektur SCADA</h4>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                  <button onclick="alert('Membuka viewer PDF Proposal PKM-KC-2026-014...');" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center space-x-1">
+                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                    <span>Draft</span>
+                  </button>
+                  <button onclick="alert('Form revisi untuk tim Taruna M. Farhan telah dikirim.');" class="px-3 py-1.5 border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg text-xs font-semibold">
+                    Beri Catatan Revisi
+                  </button>
+                  <button onclick="alert('Usulan PKM-KC-2026-014 berhasil DISETUJUI dan diteruskan ke Reviewer PPM.');" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-sm">
+                    Setujui Usulan
+                  </button>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50/50">
+                <div class="space-y-1">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-800">PKM-RE</span>
+                    <span class="text-xs font-mono text-slate-500">PKM-RE-2026-009</span>
+                    <span class="text-xs text-slate-500">• Taruna Bagas Pratama</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-900">Analisis Ketahanan Enkripsi Kyber Terhadap Side Channel Power Attack</h4>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                  <button onclick="alert('Membuka PDF...');" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100">Draft</button>
+                  <button onclick="alert('Catatan revisi dikirim.');" class="px-3 py-1.5 border border-amber-300 bg-amber-50 text-amber-800 rounded-lg text-xs font-semibold">Revisi</button>
+                  <button onclick="alert('Usulan DISETUJUI!');" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold">Setujui</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (role === 'reviewer') {
+        const u = users.reviewer;
+        sidebarNav.innerHTML = `
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg bg-sky-50/70 border-l-[3px] border-[#0284C7] transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-sky-700 text-[18px]">fact_check</span>
+              <span class="text-sm font-bold text-slate-900">Tugas Penilaian</span>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-200 text-amber-900 font-bold">5 Tim</span>
+          </a>
+          <a href="javascript:void(0)" onclick="openGuidanceModal()" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-slate-400 text-[18px]">rule</span>
+              <span class="text-sm text-slate-600 group-hover:text-slate-900">Rubrik Penilaian</span>
+            </div>
+          </a>
+        `;
+
+        content.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200/80 gap-4">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-mono text-[11px] font-bold">PORTAL DEWAN REVIEWER</span>
+                <span class="text-xs font-mono text-slate-400">NIP: ${u.idNumber}</span>
+              </div>
+              <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
+                Penilaian Substansi &amp; Kelayakan
+              </h1>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-mono text-slate-500 block">Batas Penilaian Internal:</span>
+              <span class="text-xs font-mono font-bold text-amber-600">15 Februari 2026</span>
+            </div>
+          </div>
+
+          <div class="mt-6 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 border-b border-slate-200 font-mono text-slate-600 uppercase">
+                <tr>
+                  <th class="p-3.5">ID &amp; Judul Usulan</th>
+                  <th class="p-3.5 hidden sm:table-cell">Skema</th>
+                  <th class="p-3.5">Status Penilaian</th>
+                  <th class="p-3.5 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-3.5">
+                    <span class="font-mono text-[11px] text-slate-400 block">PKM-KC-2026-014</span>
+                    <span class="font-bold text-slate-800 text-sm">Sistem Deteksi Intrusi SCADA</span>
+                  </td>
+                  <td class="p-3.5 hidden sm:table-cell">
+                    <span class="whitespace-nowrap inline-flex items-center text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700">PKM-KC</span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-50 text-amber-800 border border-amber-200">Draft Nilai: 84.5</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <button onclick="alert('Membuka rubrik penilaian & form scoring 7 kriteria Belmawa...');" class="px-3 py-1.5 bg-[#0F172A] text-white rounded-lg hover:bg-slate-800 font-semibold">
+                      Ubah Nilai
+                    </button>
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-3.5">
+                    <span class="font-mono text-[11px] text-slate-400 block">PKM-PI-2026-004</span>
+                    <span class="font-bold text-slate-800 text-sm">Modul Hardware Token ESP32</span>
+                  </td>
+                  <td class="p-3.5 hidden sm:table-cell">
+                    <span class="whitespace-nowrap inline-flex items-center text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-700">PKM-PI</span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-rose-50 text-rose-800 border border-rose-200">Belum Dinilai</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <button onclick="alert('Membuka form penilaian...');" class="px-3 py-1.5 bg-sky-600 text-white rounded-lg hover:bg-sky-500 font-semibold">
+                      Beri Nilai
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (role === 'admin') {
+        const u = users.admin;
+        sidebarNav.innerHTML = `
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg bg-sky-50/70 border-l-[3px] border-[#0284C7] transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-sky-700 text-[18px]">admin_panel_settings</span>
+              <span class="text-sm font-bold text-slate-900">Manajemen PPM</span>
+            </div>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          </a>
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-slate-400 text-[18px]">group_add</span>
+              <span class="text-sm text-slate-600 group-hover:text-slate-900">Plotting Reviewer</span>
+            </div>
+          </a>
+          <a href="javascript:void(0)" class="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-100/60 border-l-[3px] border-transparent transition-all">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-slate-400 text-[18px]">tune</span>
+              <span class="text-sm text-slate-600 group-hover:text-slate-900">Distribusi Kuota</span>
+            </div>
+          </a>
+        `;
+
+        content.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200/80 gap-4">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono text-[11px] font-bold">KONTROL ADMINISTRASI PPM</span>
+                <span class="text-xs font-mono text-slate-400">Total Tim: 69</span>
+              </div>
+              <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
+                Direktori Komprehensif Seluruh Usulan
+              </h1>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="alert('Mengekspor laporan CSV terenkripsi ke email PPM...');" class="px-3 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold flex items-center space-x-1 shadow-sm">
+                <span class="material-symbols-outlined text-[16px]">file_download</span>
+                <span>Ekspor Rekap Laporan</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- University Wide Proposal Management Feed -->
+          <div class="mt-6 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span class="font-bold text-slate-800 font-mono">69 Tim Terdaftar (Seluruh Program Studi)</span>
+              <div class="flex gap-2">
+                <button onclick="alert('Memvalidasi berkas administratif secara batch...');" class="px-2.5 py-1 bg-sky-600 text-white rounded text-xs font-medium">Verifikasi Berkas Massal</button>
+              </div>
+            </div>
+            <div class="divide-y divide-slate-100 text-xs">
+              <!-- Item 1 -->
+              <div class="p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50">
+                <div>
+                  <div class="flex items-center space-x-2 font-mono text-[11px]">
+                    <span class="font-bold text-sky-700">PKM-KC-2026-014</span>
+                    <span class="text-slate-400">• Pembimbing: Dr. Ir. Ahmad Fauzi</span>
+                  </div>
+                  <p class="font-bold text-slate-900 text-sm mt-0.5">Sistem Deteksi Intrusi Berbasis Deep Learning pada Arsitektur SCADA</p>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                  <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">Lolos Internal</span>
+                  <button onclick="alert('Plotting reviewer khusus untuk usulan ini.');" class="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">Plot Reviewer</button>
+                </div>
+              </div>
+              <!-- Item 2 -->
+              <div class="p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50">
+                <div>
+                  <div class="flex items-center space-x-2 font-mono text-[11px]">
+                    <span class="font-bold text-slate-800">PKM-RE-2026-009</span>
+                    <span class="text-slate-400">• Pembimbing: Mayor Sus Budi Wicaksono</span>
+                  </div>
+                  <p class="font-bold text-slate-900 text-sm mt-0.5">Analisis Ketahanan Enkripsi Kyber Terhadap Side Channel Power Attack</p>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                  <span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 font-medium">Review Dosen</span>
+                  <button onclick="alert('Plotting reviewer...');" class="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">Plot Reviewer</button>
+                </div>
+              </div>
+              <!-- Item 3 -->
+              <div class="p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50">
+                <div>
+                  <div class="flex items-center space-x-2 font-mono text-[11px]">
+                    <span class="font-bold text-cyan-800">PKM-PI-2026-004</span>
+                    <span class="text-slate-400">• Pembimbing: Siti Rahmah, S.ST.</span>
+                  </div>
+                  <p class="font-bold text-slate-900 text-sm mt-0.5">Modul Hardware Token Otentikasi Berbasis ESP32 untuk Koperasi Mitra</p>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                  <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-medium">Revisi Format</span>
+                  <button onclick="alert('Detail usulan...');" class="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">Detail</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // ----------------------------------------------------
+    // 3. LOGIN INTERACTION & OWASP ASVS LEVEL 1 LOGIC
+    // ----------------------------------------------------
+    function selectLoginRole(role) {
+      appState.selectedLoginRole = role;
+      
+      // Update role tab styling
+      document.querySelectorAll('.login-role-tab').forEach(tab => {
+        tab.classList.remove('bg-white', 'text-sky-700', 'font-semibold', 'shadow-sm');
+        tab.classList.add('text-slate-600');
+      });
+      const selectedTab = document.getElementById(`tab-${role}`);
+      if (selectedTab) {
+        selectedTab.classList.add('bg-white', 'text-sky-700', 'font-semibold', 'shadow-sm');
+        selectedTab.classList.remove('text-slate-600');
+      }
+
+      // Update input labels & placeholders according to role
+      const idLabel = document.getElementById('login-id-label');
+      const idInput = document.getElementById('identity-input');
+      
+      if (role === 'taruna') {
+        idLabel.textContent = 'NIM (Nomor Induk Mahasiswa)';
+        idInput.placeholder = 'Masukkan NIM (contoh: 2120014)';
+      } else {
+        idLabel.textContent = 'NIDN / NIP';
+        idInput.placeholder = 'Masukkan NIDN atau NIP';
+      }
+
+      hideErrors();
+    }
+
+    function quickFill(role) {
+      selectLoginRole(role);
+      const idInput = document.getElementById('identity-input');
+      const passInput = document.getElementById('password-input');
+      idInput.value = users[role].idNumber;
+      passInput.value = 'PoltekSSN#2026';
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('password-input');
+      const icon = document.getElementById('password-toggle-icon');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        passInput.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      
+      // If locked out, reject immediately
+      if (appState.lockoutSecondsRemaining > 0) {
+        return;
+      }
+
+      const inputId = document.getElementById('identity-input').value.trim();
+      const inputPass = document.getElementById('password-input').value;
+      const targetRole = appState.selectedLoginRole;
+      const validUser = users[targetRole];
+
+      // Demo validation logic
+      const isValid = (inputId === validUser.idNumber && inputPass.length >= 6);
+
+      if (isValid) {
+        // Reset failed counter & switch to dashboard
+        appState.failedAttempts = 0;
+        hideErrors();
+        setAppState('dashboard', targetRole);
+      } else {
+        // OWASP ASVS V2.2.2: Anti-Enumeration unified error message
+        appState.failedAttempts++;
+        showUnifiedError('Kredensial atau peran yang dipilih tidak valid. Silakan periksa kembali.');
+
+        // OWASP ASVS V2.2.1: Brute-Force lockout after 5 attempts
+        if (appState.failedAttempts >= 5) {
+          triggerLockout(60);
+        }
+      }
+    }
+
+    function showUnifiedError(msg) {
+      const alertBox = document.getElementById('login-error-alert');
+      const alertText = document.getElementById('login-error-text');
+      alertText.textContent = msg;
+      alertBox.classList.remove('hidden');
+    }
+
+    function hideErrors() {
+      const alertBox = document.getElementById('login-error-alert');
+      if (alertBox) alertBox.classList.add('hidden');
+    }
+
+    function triggerLockout(seconds) {
+      appState.lockoutSecondsRemaining = seconds;
+      const lockoutBox = document.getElementById('login-lockout-alert');
+      const submitBtn = document.getElementById('login-submit-btn');
+      const countdownSpan = document.getElementById('lockout-countdown');
+      
+      lockoutBox.classList.remove('hidden');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      if (appState.lockoutTimer) clearInterval(appState.lockoutTimer);
+
+      appState.lockoutTimer = setInterval(() => {
+        appState.lockoutSecondsRemaining--;
+        if (countdownSpan) countdownSpan.textContent = appState.lockoutSecondsRemaining;
+
+        if (appState.lockoutSecondsRemaining <= 0) {
+          clearInterval(appState.lockoutTimer);
+          lockoutBox.classList.add('hidden');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          appState.failedAttempts = 0;
+        }
+      }, 1000);
+    }
+
+    // Modal Helpers
+    function openForgotModal() {
+      document.getElementById('forgot-modal').classList.remove('hidden');
+      document.getElementById('forgot-success-box').classList.add('hidden');
+      document.getElementById('forgot-id-input').value = '';
+    }
+
+    function closeForgotModal() {
+      document.getElementById('forgot-modal').classList.add('hidden');
+    }
+
+    function triggerForgotSuccess() {
+      const box = document.getElementById('forgot-success-box');
+      box.classList.remove('hidden');
+    }
+
+    function openGuidanceModal() {
+      document.getElementById('guidance-modal').classList.remove('hidden');
+    }
+
+    function closeGuidanceModal() {
+      document.getElementById('guidance-modal').classList.add('hidden');
+    }
+
+    function openProposalModal() {
+      document.getElementById('proposal-modal').classList.remove('hidden');
+    }
+
+    function closeProposalModal() {
+      document.getElementById('proposal-modal').classList.add('hidden');
+    }
+
+    function handleNewProposal(e) {
+      e.preventDefault();
+      const title = document.getElementById('modal-title').value;
+      alert(`Proposal baru berhasil diunggah:\n"${title}"\nStatus: Menunggu Tinjauan Pembimbing.`);
+      closeProposalModal();
+    }
+  </script>
+
+
+</body></html>

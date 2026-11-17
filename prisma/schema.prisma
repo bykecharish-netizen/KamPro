@@ -1,0 +1,154 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  PENGUSUL
+  KAPRODI
+  KA_PPM
+  REVIEWER
+  DIREKTUR
+  ADMIN
+}
+
+model User {
+  id                 String    @id @default(uuid())
+  nip_npm            String    @unique
+  email              String    @unique
+  password_hash      String
+  nama_lengkap       String
+  gelar              String?
+  prodi              String?
+  kelompok_keilmuan  String?
+  kelas              String?
+  no_hp              String?
+  is_active          Boolean   @default(true)
+  created_at         DateTime  @default(now())
+
+  // Relasi
+  roles              UserRole[]
+  sessions           Session[]
+  proposals_as_ketua Proposal[]        @relation("KetuaProposals")
+  proposal_members   ProposalMember[]
+  proposal_reviews   ProposalReview[]
+  audit_logs         AuditLog[]
+
+  @@map("users")
+}
+
+model UserRole {
+  id      String @id @default(uuid())
+  user_id String
+  role    Role
+
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, role])
+  @@index([user_id])
+  @@index([role])
+  @@map("user_roles")
+}
+
+model Session {
+  id               String   @id @default(uuid())
+  user_id          String
+  token_hash       String   @unique
+  active_role      String
+  last_activity_at DateTime @default(now())
+  expires_at       DateTime
+
+  user             User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([token_hash])
+  @@index([expires_at])
+  @@map("sessions")
+}
+
+model Proposal {
+  id                 String           @id @default(uuid())
+  no_agenda          String?          @unique
+  no_registrasi      String?          @unique
+  judul              String
+  skema              String
+  tahap              String           // e.g., "PROPOSAL", "LAPORAN"
+  status             String           // e.g., "DRAFT", "MENUNGGU_VALIDASI_PRODI", "TERVERIFIKASI_ADMIN", "PENILAIAN_REVIEWER", "DISETUJUI", "REVISI"
+  ketua_id           String
+  prodi              String
+  file_url           String
+  sanitized_file_url String?
+  skor_rata_rata     Float?
+  is_bypass          Boolean          @default(false)
+  alasan_bypass      String?          @db.Text
+  created_at         DateTime         @default(now())
+
+  ketua              User             @relation("KetuaProposals", fields: [ketua_id], references: [id], onDelete: Restrict)
+  members            ProposalMember[]
+  reviews            ProposalReview[]
+
+  @@index([ketua_id])
+  @@index([prodi])
+  @@index([status])
+  @@index([tahap])
+  @@map("proposals")
+}
+
+model ProposalMember {
+  id          String   @id @default(uuid())
+  proposal_id String
+  user_id     String
+  peran_tim   String   // e.g., "Anggota Dosen", "Anggota Taruna", "Tendik"
+
+  proposal    Proposal @relation(fields: [proposal_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Restrict)
+
+  @@unique([proposal_id, user_id])
+  @@index([proposal_id])
+  @@index([user_id])
+  @@map("proposal_members")
+}
+
+model ProposalReview {
+  id            String    @id @default(uuid())
+  proposal_id   String
+  reviewer_id   String
+  reviewer_slot Int       // 1, 2, atau 3
+  skor          Float?
+  catatan       String?   @db.Text
+  is_locked     Boolean   @default(false)
+  submitted_at  DateTime?
+
+  proposal      Proposal  @relation(fields: [proposal_id], references: [id], onDelete: Cascade)
+  reviewer      User      @relation(fields: [reviewer_id], references: [id], onDelete: Restrict)
+
+  @@unique([proposal_id, reviewer_id])
+  @@unique([proposal_id, reviewer_slot])
+  @@index([proposal_id])
+  @@index([reviewer_id])
+  @@map("proposal_reviews")
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  timestamp_utc DateTime @default(now())
+  actor_id      String?
+  active_role   String?
+  ip_address    String?
+  action_type   String   // e.g., "LOGIN", "LOGOUT", "CPL_VALIDATION", "REVIEW_SUBMITTED", "BYPASS_DIRECTOR"
+  target_id     String?
+  status_code   String?  // e.g., "200", "403"
+  details       String?  @db.Text
+
+  actor         User?    @relation(fields: [actor_id], references: [id], onDelete: SetNull)
+
+  @@index([actor_id])
+  @@index([action_type])
+  @@index([timestamp_utc])
+  @@map("audit_logs")
+}
