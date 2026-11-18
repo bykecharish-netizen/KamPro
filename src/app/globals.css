@@ -11,6 +11,10 @@
   --color-poltek-gold: #D97706;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom scrollbar matching Stitch unified-portal.html */
 ::-webkit-scrollbar {
   width: 6px;
